@@ -1,5 +1,4 @@
 {%- import "macros.tera" as macros -%}
-#[allow(clippy::all)]
 use krpc_mars::krpc as krpc;
 use krpc_mars::protobuf as protobuf;
 use krpc_mars::client::CallHandle;
