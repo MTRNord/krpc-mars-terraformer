@@ -74,7 +74,7 @@ impl Type {
             Type::Bool => "bool".to_string(),
             Type::SInt32 => "i32".to_string(),
             Type::UInt32 => "u32".to_string(),
-            Type::Bytes => "&[u8]".to_string(),
+            Type::Bytes => "Vec<u8>".to_string(),
             Type::Double => "f64".to_string(),
             Type::Float => "f32".to_string(),
             Type::String => "String".to_string(),
