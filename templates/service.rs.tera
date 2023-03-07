@@ -20,13 +20,13 @@ impl fmt::Debug for {{ name }} {
 }
 
 impl RPCEncodable for {{ name }} {
-    fn encode(&self, output: &mut protobuf::CodedOutputStream) -> Result<(), protobuf::ProtobufError> {
+    fn encode(&self, output: &mut protobuf::CodedOutputStream) -> Result<(), protobuf::Error> {
         self.id.encode(output)
     }
 }
 
 impl RPCExtractable for {{ name }} {
-    fn extract_value(input: &mut protobuf::CodedInputStream) -> Result<Self, protobuf::ProtobufError> {
+    fn extract_value(input: &mut protobuf::CodedInputStream) -> Result<Self, protobuf::Error> {
         let id = RPCExtractable::extract_value(input)?;
         Ok({{ name }} { id })
     }
@@ -43,7 +43,7 @@ impl {{ name }} {
 
             {%- if method_def.parameters | length > 0 %}
 
-        let mut arguments = protobuf::RepeatedField::<krpc::Argument>::new();
+        let mut arguments = Vec::<krpc::Argument>::new();
 
                 {%- for param in method_def.parameters %}
 
@@ -65,7 +65,7 @@ impl {{ name }} {
         proc_call.set_service(String::from("{{ service_name }}"));
         proc_call.set_procedure(String::from("{{ name }}_{{ method_name }}"));
 
-        let mut arguments = protobuf::RepeatedField::<krpc::Argument>::new();
+        let mut arguments = Vec::<krpc::Argument>::new();
 
         let mut arg0 = krpc::Argument::new();
         arg0.set_position(0);
@@ -107,13 +107,13 @@ impl From<i32> for {{ name }} {
 }
 
 impl RPCEncodable for {{ name }} {
-    fn encode(&self, output: &mut protobuf::CodedOutputStream) -> Result<(), protobuf::ProtobufError> {
+    fn encode(&self, output: &mut protobuf::CodedOutputStream) -> Result<(), protobuf::Error> {
         (*self as i32).encode(output)
     }
 }
 
 impl RPCExtractable for {{ name }} {
-    fn extract_value(input: &mut protobuf::CodedInputStream) -> Result<Self, protobuf::ProtobufError> {
+    fn extract_value(input: &mut protobuf::CodedInputStream) -> Result<Self, protobuf::Error> {
         let value : i32 = RPCExtractable::extract_value(input)?;
         Ok({{ name }}::from(value))
     }
@@ -130,7 +130,7 @@ pub fn {{ proc_name | format_proc_name }}({{ macros::format_params(params=proc_d
 
         {%- if proc_def.parameters | length > 0 %}
 
-    let mut arguments = protobuf::RepeatedField::<krpc::Argument>::new();
+    let mut arguments = Vec::<krpc::Argument>::new();
 
             {%- for param in proc_def.parameters %}
 
