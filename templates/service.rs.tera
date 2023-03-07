@@ -78,7 +78,7 @@ impl {{ name }} {
         arg{{ loop.index }}.value = p_{{ param.name }}.encode_to_bytes().unwrap();
         arguments.push(arg{{ loop.index }});
             {%- endfor %}
-        proc_call.arguments = arguments
+        proc_call.arguments = arguments;
 
         CallHandle::new(proc_call)
     }
