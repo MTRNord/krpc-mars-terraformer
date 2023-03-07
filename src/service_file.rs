@@ -56,6 +56,7 @@ pub enum Type {
     Bool,
     SInt32,
     UInt32,
+    Bytes,
     Double,
     Float,
     String,
@@ -73,6 +74,7 @@ impl Type {
             Type::Bool => "bool".to_string(),
             Type::SInt32 => "i32".to_string(),
             Type::UInt32 => "u32".to_string(),
+            Type::Bytes => "&[u8]".to_string(),
             Type::Double => "f64".to_string(),
             Type::Float => "f32".to_string(),
             Type::String => "String".to_string(),
@@ -92,7 +94,7 @@ impl Type {
                 format!("super::{}::{}", service.to_snake_case(), name)
             }
             Type::Dictionary { types } => {
-                let mut types = types.into_iter();
+                let mut types = types.iter();
                 let key_type = types
                     .next()
                     .expect("Malformed dictionary type")

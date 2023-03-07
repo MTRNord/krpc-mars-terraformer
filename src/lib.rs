@@ -45,7 +45,7 @@ where
     for s in services {
         use heck::ToSnakeCase;
         use std::io::Write;
-        write!(f, "pub mod {};\n", s.to_snake_case())?;
+        writeln!(f, "pub mod {};", s.to_snake_case())?;
     }
 
     Ok(())
@@ -57,7 +57,7 @@ fn format_doc(
 ) -> tera::Result<tera::Value> {
     match val {
         tera::Value::String(s) => {
-            let s = s.replace("\n", " ");
+            let s = s.replace('\n', " ");
             Ok(tera::Value::String(s))
         }
         _ => Err(tera::Error::call_filter("format_doc", "Not a string")),
