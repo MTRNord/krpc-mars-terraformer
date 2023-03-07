@@ -38,8 +38,8 @@ impl {{ name }} {
     /// {{ method_def.documentation | format_doc }}
     pub fn {{ static_method_name | format_proc_name }}({{ macros::format_params(params=method_def.parameters) }}) -> CallHandle<{{ method_def.return_type | default(value='()') }}> {
         let mut proc_call = krpc::ProcedureCall::new();
-        proc_call.set_service(String::from("{{ service_name }}"));
-        proc_call.set_procedure(String::from("{{ name }}_static_{{ static_method_name }}"));
+        proc_call.service = String::from("{{ service_name }}");
+        proc_call.procedure = String::from("{{ name }}_static_{{ static_method_name }}");
 
             {%- if method_def.parameters | length > 0 %}
 
@@ -48,11 +48,11 @@ impl {{ name }} {
                 {%- for param in method_def.parameters %}
 
         let mut arg{{ loop.index0 }} = krpc::Argument::new();
-        arg{{ loop.index0 }}.set_position({{ loop.index0 }});
-        arg{{ loop.index0 }}.set_value(p_{{ param.name }}.encode_to_bytes().unwrap());
+        arg{{ loop.index0 }}.position = {{ loop.index0 }};
+        arg{{ loop.index0 }}.value = p_{{ param.name }}.encode_to_bytes().unwrap();
         arguments.push(arg{{ loop.index0 }});
                 {%- endfor %}
-        proc_call.set_arguments(arguments);
+        proc_call.arguments = arguments;
             {%- endif %}
 
         CallHandle::new(proc_call)
@@ -62,23 +62,23 @@ impl {{ name }} {
     /// {{ method_def.documentation | format_doc }}
     pub fn {{ method_name | format_proc_name }}(&self, {{ macros::format_params(params=method_def.parameters) }}) -> CallHandle<{{ method_def.return_type | default(value='()') }}> {
         let mut proc_call = krpc::ProcedureCall::new();
-        proc_call.set_service(String::from("{{ service_name }}"));
-        proc_call.set_procedure(String::from("{{ name }}_{{ method_name }}"));
+        proc_call.service = String::from("{{ service_name }}");
+        proc_call.procedure = String::from("{{ name }}_{{ method_name }}");
 
         let mut arguments = Vec::<krpc::Argument>::new();
 
         let mut arg0 = krpc::Argument::new();
-        arg0.set_position(0);
-        arg0.set_value(self.id.encode_to_bytes().unwrap());
+        arg0.position = 0;
+        arg0.value = self.id.encode_to_bytes().unwrap();
         arguments.push(arg0);
             {%- for param in method_def.parameters %}
 
         let mut arg{{ loop.index }} = krpc::Argument::new();
-        arg{{ loop.index }}.set_position({{ loop.index }});
-        arg{{ loop.index }}.set_value(p_{{ param.name }}.encode_to_bytes().unwrap());
+        arg{{ loop.index }}.position = {{ loop.index }};
+        arg{{ loop.index }}.value = p_{{ param.name }}.encode_to_bytes().unwrap();
         arguments.push(arg{{ loop.index }});
             {%- endfor %}
-        proc_call.set_arguments(arguments);
+        proc_call.arguments = arguments
 
         CallHandle::new(proc_call)
     }
@@ -125,8 +125,8 @@ impl RPCExtractable for {{ name }} {
 /// {{ proc_def.documentation | format_doc }}
 pub fn {{ proc_name | format_proc_name }}({{ macros::format_params(params=proc_def.parameters) }}) -> CallHandle<{{ proc_def.return_type | default(value='()') }}> {
     let mut proc_call = krpc::ProcedureCall::new();
-    proc_call.set_service(String::from("{{ service_name }}"));
-    proc_call.set_procedure(String::from("{{ proc_name }}"));
+    proc_call.service = String::from("{{ service_name }}");
+    proc_call.procedure = String::from("{{ proc_name }}");
 
         {%- if proc_def.parameters | length > 0 %}
 
@@ -135,11 +135,11 @@ pub fn {{ proc_name | format_proc_name }}({{ macros::format_params(params=proc_d
             {%- for param in proc_def.parameters %}
 
     let mut arg{{ loop.index0 }} = krpc::Argument::new();
-    arg{{ loop.index0 }}.set_position({{ loop.index0 }});
-    arg{{ loop.index0 }}.set_value(p_{{ param.name }}.encode_to_bytes().unwrap());
+    arg{{ loop.index0 }}.position = {{ loop.index0 }};
+    arg{{ loop.index0 }}.value = p_{{ param.name }}.encode_to_bytes().unwrap();
     arguments.push(arg{{ loop.index0 }});
             {%- endfor %}
-    proc_call.set_arguments(arguments);
+    proc_call.arguments = arguments;
         {%- endif %}
 
     CallHandle::new(proc_call)
